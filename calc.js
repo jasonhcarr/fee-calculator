@@ -1,9 +1,96 @@
+var currentValue = [];
+var currentTotal = null;
+var currentOperator = null;
+var storedOperator = null;
 
-// TODO: DEFINE ANY VARIABLES HERE
+function handleButtonClick(buttonValue) {
+    switch (buttonValue) {
+        case '.':
+            currentValue.push(buttonValue);
+            updateDisplay(Number(currentValue.join('')));
+            break;
+        case '0':
+            currentValue.push(buttonValue);
+            updateDisplay(Number(currentValue.join('')));
+            break;
+        case '1':
+            currentValue.push(buttonValue);
+            updateDisplay(Number(currentValue.join('')));
+            break;
+        case '2':
+            currentValue.push(buttonValue);
+            updateDisplay(Number(currentValue.join('')));
+            break;
+        case '3':
+            currentValue.push(buttonValue);
+            updateDisplay(Number(currentValue.join('')));
+            break;
+        case '4':
+            currentValue.push(buttonValue);
+            updateDisplay(Number(currentValue.join('')));
+            break;
+        case '5':
+            currentValue.push(buttonValue);
+            updateDisplay(Number(currentValue.join('')));
+            break;
+        case '6':
+            currentValue.push(buttonValue);
+            updateDisplay(Number(currentValue.join('')));
+            break;
+        case '7':
+            currentValue.push(buttonValue);
+            updateDisplay(Number(currentValue.join('')));
+            break;
+        case '8':
+            currentValue.push(buttonValue);
+            updateDisplay(Number(currentValue.join('')));
+            break;
+        case '9':
+            currentValue.push(buttonValue);
+            updateDisplay(Number(currentValue.join('')));
+            break;
+        case '+':
+            currentOperator = buttonValue;
+            operate();
+            break;
+        case '-':
+            currentOperator = buttonValue;
+            operate();
+            break;
+        case 'x':
+            currentOperator = '*';
+            operate();
+            break;
+        case '/':
+            currentOperator = buttonValue;
+            operate();
+            break;
+        case '=':
+            operate();
+            break;
+        default:
+            updateDisplay('');
+            currentTotal = 0;
+            currentOperator = null;
+            currentValue = [];
+    }
+}
 
 
+function operate() {
+    if (currentTotal === 0) {
+        currentTotal = Number(currentValue.join(''));
+        updateDisplay(currentTotal);
+        storedOperator = currentOperator;
+    } else {
+        currentTotal = eval(currentTotal + storedOperator + Number(currentValue.join('')));
+        updateDisplay(currentTotal);
+        storedOperator = currentOperator;
+    }
+    currentValue = [];
+}
 
-// TODO: DEFINE YOUR FUNCTIONS HERE
+
 
 
 
@@ -15,11 +102,10 @@
  *
  * @param  {String} buttonValue   The value of the button that was clicked on, for example "6" or "+"
  */
-function handleButtonClick(buttonValue) {
 
-    // TODO: WRITE SOME OF YOUR CODE HERE
 
-}
+
+
 
 
 
@@ -107,7 +193,7 @@ document.querySelector('.run-tests').addEventListener('click', function() {
         console.log('All tests have run. (If you see no errors, they all passed!)');
         updateDisplay('');
 
-    } catch(e) {
+    } catch (e) {
         console.error('There was a syntax error during the test run:', e);
     }
 });
@@ -127,6 +213,7 @@ document.querySelector('.run-tests').addEventListener('click', function() {
 });
 
 var display = document.querySelector('.display figure');
+
 function updateDisplay(text) {
     display.innerText = text;
 }
