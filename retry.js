@@ -1,94 +1,108 @@
-var currentValue = [];
-var currentTotal = null;
-var currentOperator = null;
-var storedOperator = null;
+var calcDisplay = '';
+var currentTotal = 0;
+var storedOperator = '';
+var pressedOperator = false;
 
 function handleButtonClick(buttonValue) {
+    if (pressedOperator === true) {
+        calcDisplay = '';
+    }
+    if (display.innerText === 'Error' && buttonValue !== 'clear') {
+        handleButtonClick('clear');
+    }
     switch (buttonValue) {
+        case 'clear':
+            calcDisplay = '';
+            currentTotal = 0;
+            storedOperator = '';
+            pressedOperator = false;
+            break;
         case '.':
-            currentValue.push(buttonValue);
-            updateDisplay(Number(currentValue.join('')));
-            break;
-        case '0':
-            currentValue.push(buttonValue);
-            updateDisplay(Number(currentValue.join('')));
-            break;
-        case '1':
-            currentValue.push(buttonValue);
-            updateDisplay(Number(currentValue.join('')));
-            break;
-        case '2':
-            currentValue.push(buttonValue);
-            updateDisplay(Number(currentValue.join('')));
-            break;
-        case '3':
-            currentValue.push(buttonValue);
-            updateDisplay(Number(currentValue.join('')));
-            break;
-        case '4':
-            currentValue.push(buttonValue);
-            updateDisplay(Number(currentValue.join('')));
-            break;
-        case '5':
-            currentValue.push(buttonValue);
-            updateDisplay(Number(currentValue.join('')));
-            break;
-        case '6':
-            currentValue.push(buttonValue);
-            updateDisplay(Number(currentValue.join('')));
-            break;
-        case '7':
-            currentValue.push(buttonValue);
-            updateDisplay(Number(currentValue.join('')));
-            break;
-        case '8':
-            currentValue.push(buttonValue);
-            updateDisplay(Number(currentValue.join('')));
-            break;
-        case '9':
-            currentValue.push(buttonValue);
-            updateDisplay(Number(currentValue.join('')));
+            if (pressedOperator === true) {
+                pressedOperator = false;
+            }
+            if (calcDisplay.includes('.')) {
+                calcDisplay = "Error";
+            } else {
+                calcDisplay += buttonValue;
+            }
             break;
         case '+':
-            currentOperator = buttonValue;
-            operate();
-            break;
         case '-':
-            currentOperator = buttonValue;
-            operate();
-            break;
         case 'x':
-            currentOperator = '*';
-            operate();
-            break;
         case '/':
-            currentOperator = buttonValue;
-            operate();
+            if (buttonValue === '-' && (pressedOperator === true || display.innerText === '')) {
+                calcDisplay += '-';
+            } else if (display.innerText === '' || pressedOperator === true) {
+                calcDisplay = 'Error';
+            } else if (storedOperator === '') {
+                currentTotal = display.innerText;
+                storedOperator = buttonValue;
+                pressedOperator = true;
+                calcDisplay = calcDisplay;
+            } else {
+                var operand = display.innerText;
+                calcDisplay = whichFunction(operand);
+                currentTotal = calcDisplay;
+                pressedOperator = true;
+                storedOperator = buttonValue;
+            }
             break;
+
         case '=':
-            operate();
+            if (storedOperator === '' || pressedOperator === true) {
+              calcDisplay = 'Error';
+            } else {
+              var operandEquals = display.innerText;
+              calcDisplay = whichFunction(operandEquals);
+              currentTotal = calcDisplay;
+              pressedOperator = false;
+              storedOperator = '';
+            }
+
             break;
         default:
-            updateDisplay('');
-            currentTotal = 0;
-            currentOperator = null;
-            currentValue = [];
+            if (display.innerText === '-') {
+                calcDisplay += buttonValue;
+            } else if (!pressedOperator) {
+                calcDisplay += buttonValue;
+            } else {
+                calcDisplay = buttonValue;
+            }
+            pressedOperator = false;
     }
+
+    function whichFunction(operand) {
+        if (storedOperator === '+') {
+            return add(currentTotal, operand);
+        } else if (storedOperator === '-') {
+            return subtract(operand, currentTotal);
+        } else if (storedOperator === 'x') {
+            return multiply(currentTotal, operand);
+        } else {
+            return divide(currentTotal, operand);
+        }
+    }
+
+    updateDisplay(calcDisplay);
 }
 
-
-function operate() {
-    if (currentTotal === 0) {
-        currentTotal = Number(currentValue.join(''));
-        updateDisplay(currentTotal);
-        storedOperator = currentOperator;
-    } else {
-        currentTotal = eval(currentTotal + storedOperator + Number(currentValue.join('')));
-        updateDisplay(currentTotal);
-        storedOperator = currentOperator;
-    }
-    currentValue = [];
+function add(number1, number2) {
+    return Number(number1) + Number(number2);
 }
+
+function subtract(number2, number1) {
+    return Number(number1) - Number(number2);
+}
+
+function multiply(number1, number2) {
+    return Number(number1) * Number(number2);
+}
+
+function divide(number1, number2) {
+    return Number(number1) / Number(number2);
+}
+
 
 
 
